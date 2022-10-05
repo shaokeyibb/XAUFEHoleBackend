@@ -1,12 +1,10 @@
 package cn.xctra.xaufeholebackend.database.services;
 
 import cn.hutool.crypto.digest.BCrypt;
-import cn.xctra.xaufeholebackend.configurations.RedisCacheTool;
 import cn.xctra.xaufeholebackend.database.entities.UserEntity;
 import cn.xctra.xaufeholebackend.database.repositories.UserRepository;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service

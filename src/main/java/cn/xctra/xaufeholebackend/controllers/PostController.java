@@ -12,13 +12,9 @@ import cn.xctra.xaufeholebackend.database.entities.PostEntity;
 import cn.xctra.xaufeholebackend.database.services.PostService;
 import cn.xctra.xaufeholebackend.database.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController

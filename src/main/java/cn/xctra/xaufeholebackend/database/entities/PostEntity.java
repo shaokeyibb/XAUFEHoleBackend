@@ -1,6 +1,5 @@
 package cn.xctra.xaufeholebackend.database.entities;
 
-import javafx.geometry.Pos;
 import lombok.*;
 
 import javax.persistence.*;

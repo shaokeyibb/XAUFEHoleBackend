@@ -1,6 +1,5 @@
 package cn.xctra.xaufeholebackend.controllers;
 
-import cn.hutool.core.io.IoUtil;
 import cn.xctra.xaufeholebackend.model.WebVpnAvailableModel;
 import com.google.gson.JsonObject;
 import okhttp3.OkHttpClient;
@@ -11,9 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/webvpn/")

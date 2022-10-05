@@ -1,6 +1,5 @@
 package cn.xctra.xaufeholebackend.services;
 
-import cn.hutool.Hutool;
 import cn.hutool.core.util.RandomUtil;
 import cn.xctra.xaufeholebackend.configurations.RedisCacheTool;
 import org.springframework.beans.factory.annotation.Autowired;
