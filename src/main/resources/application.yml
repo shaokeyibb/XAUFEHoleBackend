@@ -1,6 +1,56 @@
 server:
   # 端口
   port: 5000
+  servlet:
+    context-path: "/api"
+    encoding:
+      charset: "UTF-8"
+  compression:
+    enabled: true
+  http2:
+    enabled: true
+  tomcat:
+    uri-encoding: "UTF-8"
+
+spring:
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: "jdbc:mysql://localhost:3306/hole_xctra_temp_?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai"
+    username: "hole_xctra_temp_"
+    password: "f8WcAMdeNjY4fXNy"
+    hikari:
+      connection-init-sql: "set names utf8mb4"
+  session:
+    store-type: "redis"
+  cache:
+    redis:
+      use-key-prefix: true
+      key-prefix: "xaufe_hole:"
+  redis:
+    database: 0
+    host: "localhost"
+    port: 6379
+    password:
+  jpa:
+    hibernate.ddl-auto: "update"
+    show-sql: true
+  mvc:
+    converters:
+      preferred-json-mapper: "gson"
+  mail:
+    host: "smtp.ym.163.com"
+    port: "994"
+    username: "noreply@xctc.club"
+    password: "9wFphC9wHG"
+    protocol: "smtp"
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+          starttls:
+            enable: true
 
 # Sa-Token配置
 sa-token:
@@ -18,3 +68,8 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: false
+
+xaufe-hole:
+  webvpn:
+    backend-api-hash: "77726476706e69737468656265737421f8f84d9969286b446c09c7b89d58337b9f34d4724609fc137034799109"
+
