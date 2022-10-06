@@ -30,6 +30,7 @@ public class PostEntity {
     private long id;
 
     @ManyToOne
+    @Column(nullable = false)
     private UserEntity poster;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
@@ -38,8 +39,10 @@ public class PostEntity {
     @ManyToMany(mappedBy = "starredPosts")
     private List<UserEntity> starredUsers;
 
+    @Column(nullable = false)
     private Date postTime;
 
+    @Column(nullable = false, length = 65535, columnDefinition = "Text")
     private String content;
 
     @ElementCollection

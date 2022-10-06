@@ -30,8 +30,10 @@ public class CommentEntity {
     @ManyToOne
     private PostEntity post;
 
+    @Column(nullable = false)
     private Date postTime;
 
+    @Column(nullable = false)
     private String content;
 
 }
