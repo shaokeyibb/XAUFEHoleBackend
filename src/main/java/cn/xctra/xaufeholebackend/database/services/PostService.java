@@ -66,19 +66,19 @@ public class PostService {
                 post.getStarredUsers().size(),
                 post.getAttributes(),
                 post.getTags(),
-                CollectionUtil.reverse(post.getComments().parallelStream()
+                post.getComments().parallelStream()
                         .limit(2)
                         .map(it -> new PostPreviewDto.CommentPreview(it.getId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent()))
-                        .collect(Collectors.toList())));
+                        .collect(Collectors.toList()));
     }
 
     private PostViewDto buildPostView(PostEntity post) {
         List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().collect(Collectors.toList());
         List<PostViewDto.PostsBean> posts = new ArrayList<>();
         posts.add(new PostViewDto.PostsBean(post.getPostTime().getTime(), post.getContent(), post.getAttributes(), post.getTags()));
-        posts.addAll(CollectionUtil.reverse(post.getComments().parallelStream()
+        posts.addAll(post.getComments().parallelStream()
                 .map(it -> new PostViewDto.PostsBean(it.getId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList()))
-                .collect(Collectors.toList())));
+                .collect(Collectors.toList()));
         return new PostViewDto(post.getId(), posts);
     }
 }
