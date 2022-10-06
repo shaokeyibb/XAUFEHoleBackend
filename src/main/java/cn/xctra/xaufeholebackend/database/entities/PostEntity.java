@@ -30,7 +30,6 @@ public class PostEntity {
     private long id;
 
     @ManyToOne
-    @Column(nullable = false)
     private UserEntity poster;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
