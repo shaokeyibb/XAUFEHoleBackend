@@ -68,7 +68,7 @@ public class PostService {
                 post.getTags(),
                 post.getComments().parallelStream()
                         .limit(2)
-                        .map(it -> new PostPreviewDto.CommentPreview(it.getId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent()))
+                        .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent()))
                         .collect(Collectors.toList()));
     }
 
@@ -77,7 +77,7 @@ public class PostService {
         List<PostViewDto.PostsBean> posts = new ArrayList<>();
         posts.add(new PostViewDto.PostsBean(post.getPostTime().getTime(), post.getContent(), post.getAttributes(), post.getTags()));
         posts.addAll(post.getComments().parallelStream()
-                .map(it -> new PostViewDto.PostsBean(it.getId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList()))
+                .map(it -> new PostViewDto.PostsBean(it.getSubId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList()))
                 .collect(Collectors.toList()));
         return new PostViewDto(post.getId(), posts);
     }
