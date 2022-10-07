@@ -58,7 +58,7 @@ public class PostService {
     }
 
     private PostPreviewDto buildPostPreview(PostEntity post) {
-        List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().collect(Collectors.toList());
+        List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().filter(it -> it != post.getPoster()).collect(Collectors.toList());
         return new PostPreviewDto(post.getId(),
                 post.getPostTime().getTime(),
                 post.getContent().substring(0, Math.min(post.getContent().length(), 200)),
@@ -68,16 +68,16 @@ public class PostService {
                 post.getTags(),
                 post.getComments().parallelStream()
                         .limit(2)
-                        .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent()))
+                        .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent()))
                         .collect(Collectors.toList()));
     }
 
     private PostViewDto buildPostView(PostEntity post) {
-        List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().collect(Collectors.toList());
+        List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().filter(it -> it != post.getPoster()).collect(Collectors.toList());
         List<PostViewDto.PostsBean> posts = new ArrayList<>();
         posts.add(new PostViewDto.PostsBean(post.getPostTime().getTime(), post.getContent(), post.getAttributes(), post.getTags()));
         posts.addAll(post.getComments().parallelStream()
-                .map(it -> new PostViewDto.PostsBean(it.getSubId(), commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList()))
+                .map(it -> new PostViewDto.PostsBean(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList()))
                 .collect(Collectors.toList()));
         return new PostViewDto(post.getId(), posts);
     }

@@ -1,11 +1,11 @@
 package cn.xctra.xaufeholebackend.database.entities;
 
 import lombok.*;
-import org.apache.catalina.User;
 
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -45,5 +45,21 @@ public class UserEntity {
     @JoinTable(name = "STARRED_POSTS")
     private List<PostEntity> starredPosts;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserEntity)) return false;
 
+        UserEntity that = (UserEntity) o;
+
+        if (id != that.id) return false;
+        return Objects.equals(email, that.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
+    }
 }
