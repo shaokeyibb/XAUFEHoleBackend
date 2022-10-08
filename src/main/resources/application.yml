@@ -17,7 +17,7 @@ spring:
     driver-class-name: "com.mysql.cj.jdbc.Driver"
     url: "jdbc:mysql://localhost:3306/hole_xctra_temp_?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai"
     username: "hole_xctra_temp_"
-    password: "f8WcAMdeNjY4fXNy"
+    password: ""
     hikari:
       connection-init-sql: "set names utf8mb4"
   session:
@@ -41,7 +41,7 @@ spring:
     host: "smtp.ym.163.com"
     port: "994"
     username: "noreply@xctc.club"
-    password: "9wFphC9wHG"
+    password: ""
     protocol: "smtp"
     properties:
       mail:
@@ -72,4 +72,6 @@ sa-token:
 xaufe-hole:
   webvpn:
     backend-api-hash: "77726476706e69737468656265737421f8f84d9969286b446c09c7b89d58337b9f34d4724609fc137034799109"
+  image-uploader:
+    token: ""
 
