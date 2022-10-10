@@ -49,7 +49,9 @@ public class PostController {
     @SaCheckLogin
     @PostMapping("create")
     public void create(@RequestBody CreateNewPostDto create) {
-        if (create.getAttributes() != null && !create.getAttributes().isEmpty()) {
+        if (create.getAttributes() != null
+                && !create.getAttributes().isEmpty()
+                && create.getAttributes().stream().allMatch(it -> it.equals("NSFW"))) {
             StpUtil.checkRole("admin");
         }
         postService.save(new PostEntity(userService.getUser(StpUtil.getLoginIdAsLong()), DateTime.now(), create.getContent(), create.getAttributes(), create.getTags()));
