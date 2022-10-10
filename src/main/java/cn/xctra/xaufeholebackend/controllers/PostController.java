@@ -12,6 +12,7 @@ import cn.xctra.xaufeholebackend.database.entities.PostEntity;
 import cn.xctra.xaufeholebackend.database.services.PostService;
 import cn.xctra.xaufeholebackend.database.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,9 @@ public class PostController {
         PostViewDto view = postService.view(id);
         if (view == null) {
             return ResponseEntity.notFound().build();
+        }
+        if (view.getPosts().parallelStream().flatMap(it -> it.getAttributes().parallelStream()).anyMatch(it -> it.equals("NSFW")) && !StpUtil.isLogin()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(view);
     }
