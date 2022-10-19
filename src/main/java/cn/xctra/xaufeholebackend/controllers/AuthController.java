@@ -122,17 +122,16 @@ public class AuthController {
 
     @PostMapping("emailAuth")
     public ResponseEntity<String> emailAuth(@RequestBody EmailAuthRequestDto body,
-                                            HttpServletRequest httpServletRequest,
-                                            HttpServletResponse httpServletResponse) throws IOException {
+                                            HttpServletRequest httpServletRequest) throws IOException {
         boolean verified = HappyCaptcha.verification(httpServletRequest, body.getCaptcha(), true);
 
         if (!verified) {
             return ResponseEntity.badRequest().body("验证码错误");
         }
 
-        if (!body.getUsername().endsWith("@xaufe.edu.cn")) {
-            return ResponseEntity.badRequest().body("账号不符合格式");
-        }
+//        if (!body.getUsername().endsWith("@xaufe.edu.cn")) {
+//            return ResponseEntity.badRequest().body("账号不符合格式");
+//        }
 
         if (body.isRegisterMode()) {
 
