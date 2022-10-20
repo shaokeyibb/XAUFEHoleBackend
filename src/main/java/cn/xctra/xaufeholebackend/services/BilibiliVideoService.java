@@ -34,4 +34,15 @@ public class BilibiliVideoService {
         }
     }
 
+    public String uniqueKeyToBvid(String uniqueKey) throws IOException {
+        try (Response response = okHttpClient.newCall(
+                new Request.Builder()
+                        .get()
+                        .url("https://b23.tv/" + uniqueKey)
+                        .build()
+        ).execute()) {
+            return response.request().url().pathSegments().get(1);
+        }
+    }
+
 }

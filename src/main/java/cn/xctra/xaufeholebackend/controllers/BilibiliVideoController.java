@@ -26,4 +26,9 @@ public class BilibiliVideoController {
         return bilibiliVideoService.getDetail(bvid);
     }
 
+    @GetMapping("uniqueKeyToBvid")
+    public String uniqueKeyToBvid(@RequestParam String unique_k) throws IOException {
+        return bilibiliVideoService.uniqueKeyToBvid(unique_k);
+    }
+
 }
