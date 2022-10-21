@@ -1,6 +1,9 @@
 package cn.xctra.xaufeholebackend.database.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,6 +31,7 @@ public class PostPreviewDto implements Serializable {
     private List<String> attributes;
     private List<String> tags;
     private List<CommentPreview> comments;
+    private boolean star;
 
     @Data
     @AllArgsConstructor

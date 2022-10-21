@@ -35,7 +35,8 @@ public class PostEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
     private List<CommentEntity> comments;
 
-    @ManyToMany(mappedBy = "starredPosts")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "STARRED_POSTS")
     private List<UserEntity> starredUsers;
 
     @Column(nullable = false)

@@ -3,10 +3,7 @@ package cn.xctra.xaufeholebackend.controllers;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateTime;
-import cn.xctra.xaufeholebackend.database.dto.CreateNewPostDto;
-import cn.xctra.xaufeholebackend.database.dto.PostPreviewDto;
-import cn.xctra.xaufeholebackend.database.dto.PostViewDto;
-import cn.xctra.xaufeholebackend.database.dto.ReplyPostDto;
+import cn.xctra.xaufeholebackend.database.dto.*;
 import cn.xctra.xaufeholebackend.database.entities.CommentEntity;
 import cn.xctra.xaufeholebackend.database.entities.PostEntity;
 import cn.xctra.xaufeholebackend.database.services.PostService;
@@ -64,7 +61,13 @@ public class PostController {
     @SaCheckLogin
     @PutMapping("reply")
     public void reply(@RequestBody ReplyPostDto reply) {
-        PostEntity postEntity = postService.addComments(reply.getId(), new CommentEntity(userService.getUser(StpUtil.getLoginIdAsLong()), postService.findPostById(reply.getId()), DateTime.now(), reply.getContent()));
+        postService.addComments(reply.getId(), new CommentEntity(userService.getUser(StpUtil.getLoginIdAsLong()), postService.findPostById(reply.getId()), DateTime.now(), reply.getContent()));
+    }
+
+    @SaCheckLogin
+    @PatchMapping("star/{id}")
+    public void star(@PathVariable("id") long id, @RequestBody StarPostDto star) {
+        postService.starPost(id, star.isStar());
     }
 
 }

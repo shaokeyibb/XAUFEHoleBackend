@@ -1,5 +1,6 @@
 package cn.xctra.xaufeholebackend.database.services;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.xctra.xaufeholebackend.database.dto.PostPreviewDto;
 import cn.xctra.xaufeholebackend.database.dto.PostViewDto;
@@ -57,6 +58,23 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    @Nullable
+    public PostEntity starPost(long id, boolean star) {
+        PostEntity post = findPostById(id);
+        if (post == null) return null;
+        if (post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == id) && star) {
+            return post;
+        } else if (post.getStarredUsers().parallelStream().noneMatch(it -> it.getId() == id) && !star) {
+            return post;
+        }
+        if (star) {
+            post.setStarredUsers(new ArrayList<>(CollectionUtil.addAll(post.getStarredUsers(), post.getPoster())));
+        } else {
+            post.setStarredUsers(new ArrayList<>(CollectionUtil.removeAny(post.getStarredUsers(), post.getPoster())));
+        }
+        return postRepository.save(post);
+    }
+
     private PostPreviewDto buildPostPreview(PostEntity post) {
         List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().filter(it -> it != post.getPoster()).collect(Collectors.toList());
         return new PostPreviewDto(post.getId(),
@@ -69,7 +87,8 @@ public class PostService {
                 post.getComments().parallelStream()
                         .limit(2)
                         .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent()))
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()),
+                StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
     }
 
     private PostViewDto buildPostView(PostEntity post) {
@@ -79,6 +98,6 @@ public class PostService {
         posts.addAll(post.getComments().parallelStream()
                 .map(it -> new PostViewDto.PostsBean(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList()))
                 .collect(Collectors.toList()));
-        return new PostViewDto(post.getId(), posts);
+        return new PostViewDto(post.getId(), posts, StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
     }
 }

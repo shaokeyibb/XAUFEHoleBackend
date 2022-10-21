@@ -19,6 +19,7 @@ public class PostViewDto implements Serializable {
 
     private long id;
     private List<PostsBean> posts;
+    private boolean star;
 
     @Data
     @AllArgsConstructor
