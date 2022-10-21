@@ -67,7 +67,7 @@ public class PostController {
     @SaCheckLogin
     @PatchMapping("star/{id}")
     public void star(@PathVariable("id") long id, @RequestBody StarPostDto star) {
-        postService.starPost(id, star.isStar());
+        postService.starPost(userService.getUser(StpUtil.getLoginIdAsLong()), id, star.isStar());
     }
 
 }

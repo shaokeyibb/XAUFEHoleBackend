@@ -59,12 +59,12 @@ public class PostService {
     }
 
     @Nullable
-    public PostEntity starPost(long id, boolean star) {
+    public PostEntity starPost(UserEntity user, long id, boolean star) {
         PostEntity post = findPostById(id);
         if (post == null) return null;
-        if (post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == id) && star) {
+        if (post.getStarredUsers().parallelStream().anyMatch(user::equals) && star) {
             return post;
-        } else if (post.getStarredUsers().parallelStream().noneMatch(it -> it.getId() == id) && !star) {
+        } else if (post.getStarredUsers().parallelStream().noneMatch(user::equals) && !star) {
             return post;
         }
         if (star) {
