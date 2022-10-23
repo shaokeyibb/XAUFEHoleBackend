@@ -58,7 +58,7 @@ Now, follow these steps to deploy the project:
 2. Put the compile files of frontend software to a directory
 3. Configure the Nginx to serve the files, an example here:
 
-```nginx
+```lua
 server
 {
     listen 80;
@@ -88,7 +88,7 @@ Now the project should work properly. But for the full experience, please contin
 2. Install and run [jsososo/QQMusicApi](https://github.com/jsososo/QQMusicApi)
 3. append these configurations to your nginx configuration, change the port if needed:
 
-```nginx
+```lua
     location /api/qqmusic/song/ {
       proxy_pass http://127.0.0.1:3300/song/;
     }
