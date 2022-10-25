@@ -86,7 +86,7 @@ public class PostService {
                 post.getTags(),
                 post.getComments().parallelStream()
                         .limit(2)
-                        .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent()))
+                        .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent().substring(0, Math.min(it.getContent().length(), 200))))
                         .collect(Collectors.toList()),
                 StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
     }
