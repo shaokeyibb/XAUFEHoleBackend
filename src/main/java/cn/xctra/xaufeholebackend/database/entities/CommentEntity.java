@@ -35,7 +35,7 @@ public class CommentEntity {
     @Column(nullable = false)
     private Date postTime;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 65535, columnDefinition = "Text")
     private String content;
 
 }
