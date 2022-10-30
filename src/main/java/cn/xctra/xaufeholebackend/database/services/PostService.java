@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,8 +85,7 @@ public class PostService {
                 post.getAttributes(),
                 post.getTags(),
                 post.getComments().parallelStream()
-                        .sorted(Comparator.comparing(CommentEntity::getSubId).reversed())
-                        .limit(2)
+                        .skip(Math.max(post.getComments().size() - 2, 0))
                         .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent().substring(0, Math.min(it.getContent().length(), 200))))
                         .collect(Collectors.toList()),
                 StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
