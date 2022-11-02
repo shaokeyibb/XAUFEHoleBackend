@@ -37,7 +37,7 @@ public class PostController {
 
     @GetMapping("/view/{id}")
     public ResponseEntity<PostViewDto> id(@PathVariable("id") long id) {
-        PostViewDto view = postService.view(id);
+        PostViewDto view = postService.view(id, StpUtil.hasRole("admin"));
         if (view == null) {
             return ResponseEntity.notFound().build();
         }

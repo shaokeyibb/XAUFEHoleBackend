@@ -39,9 +39,12 @@ public class PostViewDto implements Serializable {
         private String content;
         private List<String> attributes;
         private List<String> tags;
+        // For admin only
+        private UserProfileDto profile;
 
-        public PostsBean(long post_time, String content, List<String> attributes, List<String> tags) {
-            this(0, -1, post_time, content, attributes, tags);
+        // For Post but comments
+        public PostsBean(long post_time, String content, List<String> attributes, List<String> tags, UserProfileDto profile) {
+            this(0, -1, post_time, content, attributes, tags, profile);
         }
     }
 }

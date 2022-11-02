@@ -13,11 +13,14 @@ import java.util.List;
 public class UserProfileDto {
 
     private long id;
+    private long studentID;
+    private String email;
     private List<String> roles;
     private List<String> permissions;
+    // starred posts and others should not be included in this dto, and they should get from other side
 
     public UserProfileDto(UserEntity user) {
-        this(user.getId(), user.getRoles(), user.getPermissions());
+        this(user.getId(), user.getStudentID(), user.getEmail(), user.getRoles(), user.getPermissions());
     }
 
 }

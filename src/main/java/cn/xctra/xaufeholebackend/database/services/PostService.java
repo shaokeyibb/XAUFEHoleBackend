@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.xctra.xaufeholebackend.database.dto.PostPreviewDto;
 import cn.xctra.xaufeholebackend.database.dto.PostViewDto;
+import cn.xctra.xaufeholebackend.database.dto.UserProfileDto;
 import cn.xctra.xaufeholebackend.database.entities.CommentEntity;
 import cn.xctra.xaufeholebackend.database.entities.PostEntity;
 import cn.xctra.xaufeholebackend.database.entities.UserEntity;
@@ -37,8 +38,8 @@ public class PostService {
     }
 
     @Nullable
-    public PostViewDto view(long id) {
-        return postRepository.findById(id).map(this::buildPostView).orElse(null);
+    public PostViewDto view(long id, boolean isAdmin) {
+        return postRepository.findById(id).map(it -> buildPostView(it, isAdmin)).orElse(null);
     }
 
     public PostEntity save(PostEntity post) {
@@ -91,12 +92,13 @@ public class PostService {
                 StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
     }
 
-    private PostViewDto buildPostView(PostEntity post) {
+    private PostViewDto buildPostView(PostEntity post, boolean isAdmin) {
         List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().filter(it -> it != post.getPoster()).collect(Collectors.toList());
         List<PostViewDto.PostsBean> posts = new ArrayList<>();
-        posts.add(new PostViewDto.PostsBean(post.getPostTime().getTime(), post.getContent(), post.getAttributes(), post.getTags()));
+
+        posts.add(new PostViewDto.PostsBean(post.getPostTime().getTime(), post.getContent(), post.getAttributes(), post.getTags(), isAdmin ? new UserProfileDto(post.getPoster()) : null));
         posts.addAll(post.getComments().parallelStream()
-                .map(it -> new PostViewDto.PostsBean(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList()))
+                .map(it -> new PostViewDto.PostsBean(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList(), isAdmin ? new UserProfileDto(it.getPoster()) : null))
                 .collect(Collectors.toList()));
         return new PostViewDto(post.getId(), posts, StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
     }
