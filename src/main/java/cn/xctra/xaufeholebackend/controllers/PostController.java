@@ -29,6 +29,11 @@ public class PostController {
         this.userService = userService;
     }
 
+    @GetMapping("top")
+    public List<PostPreviewDto> top() {
+        return postService.getTopPosts();
+    }
+
     @GetMapping("list")
     public List<PostPreviewDto> list(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                      @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
