@@ -22,12 +22,12 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         // 此处 new 了一个 UserProfileDto 是出于希望和 Controller 返回值同步以保证封装性的想法
-        return new UserProfileDto(Objects.requireNonNull(userService.getUser((long) loginId))).getPermissions();
+        return new UserProfileDto(Objects.requireNonNull(userService.getUser(Long.parseLong(String.valueOf(loginId))))).getPermissions();
     }
 
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
         // 此处 new 了一个 UserProfileDto 是出于希望和 Controller 返回值同步以保证封装性的想法
-        return new UserProfileDto(Objects.requireNonNull(userService.getUser((long) loginId))).getRoles();
+        return new UserProfileDto(Objects.requireNonNull(userService.getUser(Long.parseLong(String.valueOf(loginId))))).getRoles();
     }
 }
