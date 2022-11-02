@@ -80,7 +80,7 @@ public class PostService {
         List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().filter(it -> it != post.getPoster()).collect(Collectors.toList());
         return new PostPreviewDto(post.getId(),
                 post.getPostTime().getTime(),
-                post.getContent().substring(0, Math.min(post.getContent().length(), 200)) + (post.getContent().length() >= 200 ? "..." : ""),
+                post.getAttributes().contains("NSFW") ? "" : (post.getContent().substring(0, Math.min(post.getContent().length(), 200)) + (post.getContent().length() >= 200 ? "..." : "")),
                 post.getComments().size(),
                 post.getStarredUsers().size(),
                 post.getAttributes(),
@@ -89,7 +89,8 @@ public class PostService {
                         .skip(Math.max(post.getComments().size() - 2, 0))
                         .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent().substring(0, Math.min(it.getContent().length(), 200)) + (it.getContent().length() >= 200 ? "..." : "")))
                         .collect(Collectors.toList()),
-                StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
+                StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()))
+                ;
     }
 
     private PostViewDto buildPostView(PostEntity post, boolean isAdmin) {
