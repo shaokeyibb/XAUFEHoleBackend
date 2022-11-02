@@ -16,14 +16,6 @@ import java.util.Objects;
 @Table(name = "users")
 public class UserEntity {
 
-    public UserEntity(long id) {
-        this(id, null, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
-    }
-
-    public UserEntity(long id, String email, String password) {
-        this(id, email, password, Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
-    }
-
     /**
      * 用户 ID，可能为用户学号，也可能为邮箱地址哈希值
      */
@@ -43,6 +35,20 @@ public class UserEntity {
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "starredUsers")
     private List<PostEntity> starredPosts;
+
+    @ElementCollection
+    private List<String> permissions;
+    @ElementCollection
+    private List<String> roles;
+
+
+    public UserEntity(long id) {
+        this(id, null, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.singletonList("user"));
+    }
+
+    public UserEntity(long id, String email, String password) {
+        this(id, email, password, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.singletonList("user"));
+    }
 
     @Override
     public boolean equals(Object o) {
