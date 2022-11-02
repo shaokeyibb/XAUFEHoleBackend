@@ -22,12 +22,12 @@ public class UserService {
         return userRepository.findById(uid).orElse(null);
     }
 
-    public UserEntity saveUser(long uid) {
-        return userRepository.save(new UserEntity(uid));
+    public UserEntity saveUser(long studentID) {
+        return userRepository.save(new UserEntity(studentID));
     }
 
     public UserEntity saveUser(String email, String password) {
-        return userRepository.save(new UserEntity(email.hashCode(), email, BCrypt.hashpw(password)));
+        return userRepository.save(new UserEntity(email, BCrypt.hashpw(password)));
     }
 
     public boolean hasUser(long uid) {

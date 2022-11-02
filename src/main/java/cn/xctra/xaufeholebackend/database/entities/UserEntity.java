@@ -17,11 +17,13 @@ import java.util.Objects;
 public class UserEntity {
 
     /**
-     * 用户 ID，可能为用户学号，也可能为邮箱地址哈希值
+     * 用户 ID，可能为用户学号哈希值，也可能为邮箱地址哈希值
      */
     @Id
     @Column(nullable = false)
     private long id;
+
+    private long studentID;
 
     private String email;
 
@@ -43,11 +45,11 @@ public class UserEntity {
 
 
     public UserEntity(long id) {
-        this(id, null, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.singletonList("user"));
+        this(String.valueOf(id).hashCode(), id, null, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.singletonList("user"));
     }
 
-    public UserEntity(long id, String email, String password) {
-        this(id, email, password, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.singletonList("user"));
+    public UserEntity(String email, String password) {
+        this(email.hashCode(), -1, email, password, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.singletonList("user"));
     }
 
     @Override
