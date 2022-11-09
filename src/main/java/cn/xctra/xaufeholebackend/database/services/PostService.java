@@ -1,6 +1,5 @@
 package cn.xctra.xaufeholebackend.database.services;
 
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.xctra.xaufeholebackend.database.dto.PostPreviewDto;
 import cn.xctra.xaufeholebackend.database.dto.PostViewDto;
@@ -32,24 +31,24 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public List<PostPreviewDto> getTopPosts() {
+    public List<PostPreviewDto> getTopPosts(boolean isLogin, long userId) {
         return postRepository.findAllByAttributesContains("Top")
                 .stream()
                 .sorted(Comparator.comparingLong(PostEntity::getId).reversed())
                 .limit(2)
-                .map(this::buildPostPreview)
+                .map(it -> buildPostPreview(it, isLogin, userId))
                 .collect(Collectors.toList());
     }
 
-    public List<PostPreviewDto> list(int page, int size) {
+    public List<PostPreviewDto> list(int page, int size, boolean isLogin, long userId) {
         Page<PostEntity> result = postRepository.findAll(
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
-        return result.map(this::buildPostPreview).toList();
+        return result.map(it -> buildPostPreview(it, isLogin, userId)).toList();
     }
 
     @Nullable
-    public PostViewDto view(long id, boolean isAdmin) {
-        return postRepository.findById(id).map(it -> buildPostView(it, isAdmin)).orElse(null);
+    public PostViewDto view(long id, boolean isLogin, long userId, boolean isAdmin) {
+        return postRepository.findById(id).map(it -> buildPostView(it, isLogin, userId, isAdmin)).orElse(null);
     }
 
     public PostEntity save(PostEntity post) {
@@ -86,7 +85,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    private PostPreviewDto buildPostPreview(PostEntity post) {
+    private PostPreviewDto buildPostPreview(PostEntity post, boolean isLogin, long userId) {
         List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().filter(it -> it != post.getPoster()).collect(Collectors.toList());
         return new PostPreviewDto(post.getId(),
                 post.getPostTime().getTime(),
@@ -99,10 +98,10 @@ public class PostService {
                         .skip(Math.max(post.getComments().size() - 2, 0))
                         .map(it -> new PostPreviewDto.CommentPreview(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent().substring(0, Math.min(it.getContent().length(), 200)) + (it.getContent().length() >= 200 ? "..." : "")))
                         .collect(Collectors.toList()),
-                StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
+                isLogin && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == userId));
     }
 
-    private PostViewDto buildPostView(PostEntity post, boolean isAdmin) {
+    private PostViewDto buildPostView(PostEntity post, boolean isLogin, long userId, boolean isAdmin) {
         List<UserEntity> commenter = post.getComments().parallelStream().map(CommentEntity::getPoster).distinct().filter(it -> it != post.getPoster()).collect(Collectors.toList());
         List<PostViewDto.PostsBean> posts = new ArrayList<>();
 
@@ -110,6 +109,6 @@ public class PostService {
         posts.addAll(post.getComments().parallelStream()
                 .map(it -> new PostViewDto.PostsBean(it.getSubId(), it.getPoster() == post.getPoster() ? -1 : commenter.indexOf(it.getPoster()), it.getPostTime().getTime(), it.getContent(), Collections.emptyList(), Collections.emptyList(), isAdmin ? new UserProfileDto(it.getPoster()) : null))
                 .collect(Collectors.toList()));
-        return new PostViewDto(post.getId(), posts, StpUtil.isLogin() && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == StpUtil.getLoginIdAsLong()));
+        return new PostViewDto(post.getId(), posts, isLogin && post.getStarredUsers().parallelStream().anyMatch(it -> it.getId() == userId));
     }
 }

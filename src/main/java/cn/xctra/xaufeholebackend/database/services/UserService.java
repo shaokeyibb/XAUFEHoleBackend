@@ -1,6 +1,5 @@
 package cn.xctra.xaufeholebackend.database.services;
 
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import cn.xctra.xaufeholebackend.database.entities.UserEntity;
 import cn.xctra.xaufeholebackend.database.repositories.UserRepository;
@@ -21,12 +20,6 @@ public class UserService {
     @Nullable
     public UserEntity getUser(long uid) {
         return userRepository.findById(uid).orElse(null);
-    }
-
-    @Nullable
-    public UserEntity currentUser() {
-        if (!StpUtil.isLogin()) return null;
-        return getUser(StpUtil.getLoginIdAsLong());
     }
 
     public UserEntity saveUser(long studentID) {

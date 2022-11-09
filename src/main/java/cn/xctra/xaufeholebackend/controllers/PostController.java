@@ -31,18 +31,18 @@ public class PostController {
 
     @GetMapping("top")
     public List<PostPreviewDto> top() {
-        return postService.getTopPosts();
+        return postService.getTopPosts(StpUtil.isLogin(), StpUtil.isLogin() ? StpUtil.getLoginIdAsLong() : 0);
     }
 
     @GetMapping("list")
     public List<PostPreviewDto> list(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                      @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
-        return postService.list(page, size);
+        return postService.list(page, size, StpUtil.isLogin(), StpUtil.isLogin() ? StpUtil.getLoginIdAsLong() : 0);
     }
 
     @GetMapping("/view/{id}")
     public ResponseEntity<PostViewDto> id(@PathVariable("id") long id) {
-        PostViewDto view = postService.view(id, StpUtil.hasRole("admin"));
+        PostViewDto view = postService.view(id, StpUtil.isLogin(), StpUtil.isLogin() ? StpUtil.getLoginIdAsLong() : 0, StpUtil.hasRole("admin"));
         if (view == null) {
             return ResponseEntity.notFound().build();
         }
