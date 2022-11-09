@@ -78,9 +78,9 @@ public class PostService {
             return post;
         }
         if (star) {
-            post.setStarredUsers(new ArrayList<>(CollectionUtil.addAll(post.getStarredUsers(), post.getPoster())));
+            post.setStarredUsers(new ArrayList<>(CollectionUtil.addAll(post.getStarredUsers(), user)));
         } else {
-            post.setStarredUsers(new ArrayList<>(CollectionUtil.removeAny(post.getStarredUsers(), post.getPoster())));
+            post.setStarredUsers(new ArrayList<>(CollectionUtil.removeAny(post.getStarredUsers(), user)));
         }
         return postRepository.save(post);
     }
